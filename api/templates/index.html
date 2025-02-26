@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rare Disease Prediction</title>
+</head>
+<body>
+    <h1>Rare Disease Prediction</h1>
+    <form id="predictionForm">
+        <!-- HPO Features (Example - adjust as needed) -->
+        <label for="HP:0000256">Macrocephaly:</label>
+        <select id="HP:0000256" name="HP:0000256">
+            <option value="0">No</option>
+            <option value="0.9">Very frequent</option>
+            <option value="0.5">Frequent</option>
+            <option value="0.15">Occasional</option>
+            <option value="0.025">Very rare</option>
+        </select><br><br>
+        
+        <label for="HP:0001249">Intellectual disability:</label>
+        <select id="HP:0001249" name="HP:0001249">
+            <option value="0">No</option>
+            <option value="0.9">Very frequent</option>
+            <option value="0.5">Frequent</option>
+            <option value="0.15">Occasional</option>
+            <option value="0.025">Very rare</option>
+        </select><br><br>
+
+        <!-- Example Categorical Feature (adjust as needed)-->
+         <label for="RefType">ICD-11:</label>
+        <input type="text" id="RefType" name="RefType"><br><br>
+
+
+        <button type="button" onclick="submitForm()">Predict</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+async function submitForm() {
+    const form = document.getElementById('predictionForm');
+    const formData = new FormData(form);
+    const data = {};
+    const hpoMapping = {{ hpo_mapping | tojson }}; // Get hpoMapping
+    
+    formData.forEach((value, key) => {
+        data[key] = value;
+    });
+
+    // Fetch API endpoint
+    const response = await fetch('/predict', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    // Display prediction results
+    const resultDiv = document.getElementById('result');
+    if (result.error) {
+        resultDiv.innerHTML = `<p>Error: ${result.error}</p>`;
+    } else {
+        const predictions = result.predictions;
+        let resultHTML = '<p>Predictions:</p><ul>';
+        predictions.forEach(orphaCode => {
+          resultHTML += `<li>${orphaCode}</li>`;
+        });
+        resultHTML += '</ul>';
+        resultDiv.innerHTML = resultHTML;
+    }
+}
+    </script>
+</body>
+</html>

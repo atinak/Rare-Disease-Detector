@@ -1,0 +1,29 @@
+rare_disease_prediction/
+├── data/
+│   └── sample_orphanet_data.csv
+├── models/
+│   └── .gitkeep
+├── src/
+│   ├── __init__.py
+│   ├── data_processor.py
+│   ├── feature_engineering.py
+│   ├── model_training.py
+│   ├── model_evaluation.py
+│   └── predictor.py
+├── api/
+│   ├── __init__.py
+│   ├── app.py
+│   ├── routes.py
+│   └── templates/
+│       ├── index.html
+│       └── result.html
+├── notebooks/
+│   └── usage_example.ipynb
+├── tests/
+│   ├── __init__.py
+│   ├── test_data_processor.py
+│   ├── test_feature_engineering.py
+│   └── test_predictor.py
+├── requirements.txt
+├── setup.py
+└── README.md
